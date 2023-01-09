@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prekių krepšelis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+
+<body class="bg-light">
+    <main>
+        <section class="pt-3 pb-3">
+            <div class="container bg-white w-50">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-12 px-5">
+                        <h2 class="display-5 mt-3 mb-5 text-uppercase fw-bold text-center">Prekių krepšelis</h2>
+                        <div class="container bg-light pt-5">
+                            <form onsubmit="addProduct(event)" class="d-flex gap-3 px-2">
+                                <input type="text"
+                                    class="form-control form-control-lg mb-4 text-left border-2 border-dark rounded-1"
+                                    id="setProductName" name="setProductName" placeholder="Įveskite prekę" value="" />
+                                <input type="number" min="0.1" step="0.1"
+                                    class="form-control form-control-lg mb-4 text-left border-2 border-dark rounded-1"
+                                    id="setProductQuantity" name="setProductQuantity" placeholder="Įveskite kiekį"
+                                    value="" />
+                                <button type="submit"
+                                    class="btn btn-danger mb-4 btn-lg text-uppercase px-1 rounded-1">Enter!</button>
+                            </form>
+                            <div class="noProduct text-center">
+                            </div>
+                            <table id="shoppingCart" class="table table-borderless table-condensed table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th style="width:55%"></th>
+                                        <th style="width:25%"></th>
+                                        <th style="width:20%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        const data = [
+            {
+                productName: 'Bananai',
+                productQuantity: 1
+            },
+            {
+                productName: 'Mandarinai',
+                productQuantity: 2
+            },
+            {
+                productName: 'Apelsinai',
+                productQuantity: 5
+            }
+        ];
+        const showCart = () => {
+            let result = '';
+            data.map((product, index) => {
+                result += `           
+                <tr>
+                    <td data-th="Product">
+                        <div class="col-md-9 text-left mt-sm-2 rounded-1">
+                            <h4>${product.productName}</h4>
+                        </div>            
+                    </td>
+                    <td data-th="Quantity">
+                        <input type="number"
+                            class="form-control form-control-lg bg-light border-dark text-center rounded-1"
+                            value="${product.productQuantity}">
+                    </td>
+                    <td class="actions" data-th="">
+                        <div>
+                            <button class="btn btn-white bg-light btn-md border-dark text-center text-uppercase mb-0 py-2 rounded-1" style="height: 48px" onclick="deleteProduct(${index})">
+                                <h4>Delete</h4>
+                            </button>
+                        </div>
+                    </td>
+                </tr> 
+            `;
+            });
+            document.querySelector('tbody').innerHTML = result;
+
+            if (result === '') {
+                document.querySelector('.noProduct').innerHTML = `<h4>Krepšelyje kol kas neturite jokių prekių.</h4>`;
+            }
+        }
+        const deleteProduct = (index) => {
+            delete data[index];
+            showCart();
+        }
+        const addProduct = (event) => {
+            event.preventDefault();
+            if (document.querySelector('[id="setProductName"]').value && document.querySelector('[name="setProductQuantity"]').value) {
+                const setProduct = {
+                    productName: document.querySelector('[id="setProductName"]').value,
+                    productQuantity: document.querySelector('[name="setProductQuantity"]').value
+                }
+                data[data.length] = setProduct;
+                showCart();
+            } else {
+                alert('Neteisingi duomenys');
+            }
+        }
+        showCart();    
+    </script>
+</body>
+
+</html>
